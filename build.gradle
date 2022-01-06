@@ -41,9 +41,8 @@ apply plugin: 'org.spongepowered.mixin'
 String mcver = "1.12.2"
 String forgever = "14.23.5.2847"
 String archivesBaseName = 'viciouscore'
-String projectver = '1.1.0'
+String projectver = '1.1.1'
 String organization = 'vicious'
-String asmVersion = "5.0.3"
 String gitlink = "github.com/Vicious-MCModding/ViciousCore"
 
 version = "${mcver}-${projectver}"
@@ -101,9 +100,6 @@ dependencies {
     deobfProvided "net.industrial-craft:industrialcraft-2:2.8.178-ex112:api" // IC2 Api
     compile "com.vicious:viciouslib:1.6.1"
     compile "org.json:json:20211205"
-    implementation "org.ow2.asm:asm-tree:$asmVersion"
-    implementation "org.ow2.asm:asm-commons:$asmVersion"
-    implementation "org.ow2.asm:asm-util:$asmVersion"
     compileOnly (fileTree(dir: 'lib', include: ['*.jar']))
 }
 
