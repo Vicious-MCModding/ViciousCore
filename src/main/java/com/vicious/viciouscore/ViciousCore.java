@@ -21,7 +21,6 @@ import com.vicious.viciouscore.common.player.ViciousCorePlayerManager;
 import com.vicious.viciouscore.common.registries.VEntityRegistry;
 import com.vicious.viciouscore.common.registries.VTileEntityRegistry;
 import com.vicious.viciouscore.common.util.file.ViciousDirectories;
-import com.vicious.viciouscore.overrides.VCoreOverrides;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -72,7 +71,6 @@ public class ViciousCore
         MinecraftForge.EVENT_BUS.register(BlockOverrideHandler.class);
         MinecraftForge.EVENT_BUS.register(ChunkOverrideHandler.class);
         MinecraftForge.EVENT_BUS.register(ViciousCoreCommonEventHandler.class);
-        VCoreOverrides.init();
         OverrideHandler.onPreInit();
         TileEntityOverrideHandler.init();
     }

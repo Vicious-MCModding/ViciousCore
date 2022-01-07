@@ -3,7 +3,6 @@ package com.vicious.viciouscore.common.util.reflect;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Loader;
-import reborncore.common.powerSystem.TilePowerAcceptor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -73,16 +72,10 @@ public class MappingsReference {
 
     }
 
-    private static void initMods(){
-        if(Loader.isModLoaded("techreborn")){
-            addMapping("update", TilePowerAcceptor.class,"func_73660_a");
-        }
-    }
     /**
      * Register MCP to SRG mappings for any class in MC.common that VCore reflects on.
      */
     private static void init(){
-        initMods();
         addMapping("getMaxHealth", EntityLivingBase.class, "func_110138_aP");
         addMapping("getAbsorptionAmount", EntityLivingBase.class, "func_110139_bj");
         addMapping("getAttributeMap", EntityLivingBase.class, "func_110140_aT");
