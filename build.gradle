@@ -41,7 +41,7 @@ apply plugin: 'org.spongepowered.mixin'
 String mcver = "1.12.2"
 String forgever = "14.23.5.2847"
 String archivesBaseName = 'viciouscore'
-String projectver = '1.0.9'
+String projectver = '1.1.0'
 String organization = 'vicious'
 String asmVersion = "5.0.3"
 String gitlink = "github.com/Vicious-MCModding/ViciousCore"
