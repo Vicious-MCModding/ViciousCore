@@ -5,6 +5,7 @@ import com.vicious.viciouscore.common.tile.TileMultiBlockComponent;
 import com.vicious.viciouscore.common.util.reflect.IFieldCloner;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -19,7 +20,7 @@ import javax.annotation.Nullable;
  */
 public class BlockMultiblockComponent extends ViciousBlock implements ITileEntityProvider, IFieldCloner {
     public BlockMultiblockComponent(Material materialIn) {
-        super(materialIn);
+        super("multi", materialIn);
     }
 
     @Nullable
@@ -28,18 +29,19 @@ public class BlockMultiblockComponent extends ViciousBlock implements ITileEntit
         return new TileMultiBlockComponent();
     }
 
-    @Override
-    public void onBlockDestroyed(World worldIn, BlockPos pos) {
-        notifyParent(worldIn, pos);
-        super.onBlockDestroyed(worldIn, pos);
-    }
 
     @Override
+    public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state) {
+        notifyParent(worldIn, pos);
+        super.onBlockDestroyedByPlayer(worldIn, pos, state);
+    }
+
+    /*@Override
     public void onBlockUpdated(World worldIn, BlockPos pos) {
         //Disabled notify for now to allow more control.
         //notifyParent(worldIn, pos);
         super.onBlockUpdated(worldIn, pos);
-    }
+    }*/
 
     @Override
     public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
