@@ -12,6 +12,6 @@ usernamecache.json
 gradle.properties
 src.zip
 /options.txt
-ViciousCore-wet.iml
-ViciousCore-wet.ipr
-ViciousCore-wet.iws
+ViciousCore.iml
+ViciousCore.ipr
+ViciousCore.iws

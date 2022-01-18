@@ -13,7 +13,7 @@ public class ModularStructureGen extends MapGenStructure {
     /**
      * Determines whether a structure should generate here. returns the chunk ground level for the center block.
      */
-    private Predicate<BlockPos> canSpawnPredicator = (v)->false;
+    private final Predicate<BlockPos> canSpawnPredicator = (v) -> false;
 
     @Override
     public String getStructureName() {
@@ -28,15 +28,16 @@ public class ModularStructureGen extends MapGenStructure {
 
     @Override
     protected boolean canSpawnStructureAtCoords(int chunkX, int chunkZ) {
-        BlockPos ground = WorldUtil.getNextChunkGround(world,new BlockPos(chunkX,256,chunkZ));
+        BlockPos ground = WorldUtil.getNextChunkGround(world, new BlockPos(chunkX, 256, chunkZ));
         return canSpawnPredicator.test(ground);
     }
 
     @Override
     protected StructureStart getStructureStart(int chunkX, int chunkZ) {
-        return new Start(chunkX,chunkZ);
+        return new Start(chunkX, chunkZ);
     }
-    public class Start extends StructureStart{
+
+    public class Start extends StructureStart {
         public Start() {
         }
 

@@ -2,7 +2,6 @@ package com.vicious.viciouscore.common.util.reflect;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.Loader;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +10,12 @@ import java.util.Map;
  * Used to reference mappings in runtime outside of the dev env.
  */
 public class MappingsReference {
-    private static Map<Class<?>, Mapping> mappings = new HashMap<>();
+    private static final Map<Class<?>, Mapping> mappings = new HashMap<>();
+
+    static {
+        init();
+
+    }
 
     public static void addMapping(String deobf, Class<?> location, String obf) {
         if (mappings.containsKey(location)) {
@@ -24,11 +28,12 @@ public class MappingsReference {
     public static Mapping getMapping(Class<?> clazz) {
         return mappings.get(clazz);
     }
-    public static String toMCP(Class<?> clazz, String srg){
+
+    public static String toMCP(Class<?> clazz, String srg) {
         String s = null;
-        while(clazz != null && s == null){
+        while (clazz != null && s == null) {
             Mapping m = mappings.get(clazz);
-            if(m != null) s = m.getDeobfuscated(srg);
+            if (m != null) s = m.getDeobfuscated(srg);
             clazz = clazz.getSuperclass();
         }
         return s;
@@ -38,44 +43,10 @@ public class MappingsReference {
         return mappings.containsKey(clazz);
     }
 
-    public static class Mapping {
-        private Map<String, String> obfdeobf = new HashMap<>();
-        private Map<String, String> deobfobf = new HashMap<>();
-
-        private Mapping() {
-        }
-
-        private Mapping register(String deobf, String obf) {
-            obfdeobf.putIfAbsent(obf, deobf);
-            deobfobf.putIfAbsent(deobf, obf);
-            return this;
-        }
-
-        public String getObfuscated(String deobf) {
-            return deobfobf.get(deobf);
-        }
-
-        public String getDeobfuscated(String obf) {
-            return obfdeobf.get(obf);
-        }
-
-        public boolean hasSRG(String deobf) {
-            return deobfobf.containsKey(deobf);
-        }
-        public boolean hasMCP(String srg) {
-            return obfdeobf.containsKey(srg);
-        }
-    }
-
-    static {
-        init();
-
-    }
-
     /**
      * Register MCP to SRG mappings for any class in MC.common that VCore reflects on.
      */
-    private static void init(){
+    private static void init() {
         addMapping("getMaxHealth", EntityLivingBase.class, "func_110138_aP");
         addMapping("getAbsorptionAmount", EntityLivingBase.class, "func_110139_bj");
         addMapping("getAttributeMap", EntityLivingBase.class, "func_110140_aT");
@@ -542,5 +513,35 @@ public class MappingsReference {
         addMapping("eventListeners", World.class, "field_73021_x");
         addMapping("calendar", World.class, "field_83016_L");
         addMapping("worldScoreboard", World.class, "field_96442_D");
+    }
+
+    public static class Mapping {
+        private final Map<String, String> obfdeobf = new HashMap<>();
+        private final Map<String, String> deobfobf = new HashMap<>();
+
+        private Mapping() {
+        }
+
+        private Mapping register(String deobf, String obf) {
+            obfdeobf.putIfAbsent(obf, deobf);
+            deobfobf.putIfAbsent(deobf, obf);
+            return this;
+        }
+
+        public String getObfuscated(String deobf) {
+            return deobfobf.get(deobf);
+        }
+
+        public String getDeobfuscated(String obf) {
+            return obfdeobf.get(obf);
+        }
+
+        public boolean hasSRG(String deobf) {
+            return deobfobf.containsKey(deobf);
+        }
+
+        public boolean hasMCP(String srg) {
+            return obfdeobf.containsKey(srg);
+        }
     }
 }

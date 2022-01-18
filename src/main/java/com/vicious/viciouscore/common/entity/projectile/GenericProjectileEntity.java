@@ -2,7 +2,6 @@ package com.vicious.viciouscore.common.entity.projectile;
 
 import com.vicious.viciouscore.common.entity.GenericEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -10,19 +9,18 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
 public class GenericProjectileEntity extends GenericEntity {
     protected static final DataParameter<Integer> TICKSEXISTED = EntityDataManager.createKey(GenericProjectileEntity.class, DataSerializers.VARINT);
-    private int expiry;
-    private Object source;
-
+    private final int expiry;
     public int ticksExisted = 0;
+    private Object source;
     //The distance from this entity's hitbox where a collision detection will occur.
 
     public GenericProjectileEntity(World world) {
-        this(world,0);
+        this(world, 0);
     }
+
     /**
      * Creates a projectile entity with a set expiry time in ticks. Once the entity has existed for the expiry, it will be killed and destroyed.
      */
@@ -30,9 +28,10 @@ public class GenericProjectileEntity extends GenericEntity {
         super(world);
         this.expiry = expirationTicks;
     }
-    public GenericProjectileEntity(World world, int expirationTicks, Entity source){
-        this(world,expirationTicks);
-        this.source=source;
+
+    public GenericProjectileEntity(World world, int expirationTicks, Entity source) {
+        this(world, expirationTicks);
+        this.source = source;
         Vec3d dir = this.getDirection(source.rotationPitch, source.getRotationYawHead());
         this.motionX = dir.x;
         this.motionY = dir.y;
@@ -53,11 +52,11 @@ public class GenericProjectileEntity extends GenericEntity {
     /**
      * Override this to execute code when expiration occurs.
      */
-    protected void onExpire(){
+    protected void onExpire() {
         //TODO:enable
         //if(!isDead) {
-           // setDead();
-       // }
+        // setDead();
+        // }
     }
 
     @Override
@@ -77,11 +76,6 @@ public class GenericProjectileEntity extends GenericEntity {
         return ticksExisted >= invincibilityTime();
     }
 
-    private int invincibilityTime() {
-        //All projectile entities have an invincibility time where they won't collide with other entities.
-        return 5;
-    }
-
     @Override
     protected void readEntityFromNBT(NBTTagCompound compound) {
         ticksExisted = compound.getInteger("existed");
@@ -95,6 +89,11 @@ public class GenericProjectileEntity extends GenericEntity {
         compound.setInteger("existed", ticksExisted);
     }
 
+    private int invincibilityTime() {
+        //All projectile entities have an invincibility time where they won't collide with other entities.
+        return 5;
+    }
+
     /**
      * Math shit.
      */
@@ -102,18 +101,17 @@ public class GenericProjectileEntity extends GenericEntity {
     /**
      * Get's a Vector's direction, adds some noise if told to.
      */
-    private Vec3d getDirection(float pitch, float yaw, float noise)
-    {
-        if(noise == 0F) return getDirection(pitch, yaw);
+    private Vec3d getDirection(float pitch, float yaw, float noise) {
+        if (noise == 0F) return getDirection(pitch, yaw);
         else return this.getVectorFromRotation(pitch - noise, yaw - noise);
     }
-    private Vec3d getDirection(float pitch, float yaw)
-    {
+
+    private Vec3d getDirection(float pitch, float yaw) {
         return this.getVectorFromRotation(pitch, yaw);
     }
-    private Vec3d getVectorFromRotation(float pitch, float yaw)
-    {
-        float toRadians = (float) (Math.PI/180);
+
+    private Vec3d getVectorFromRotation(float pitch, float yaw) {
+        float toRadians = (float) (Math.PI / 180);
         float f = MathHelper.cos(-yaw * toRadians - (float) Math.PI);
         float f1 = MathHelper.sin(-yaw * toRadians - (float) Math.PI);
         float f2 = -MathHelper.cos(-pitch * toRadians);

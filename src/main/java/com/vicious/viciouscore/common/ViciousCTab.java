@@ -5,11 +5,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class ViciousCTab extends CreativeTabs {
-    private Item icon;
+    private final Item icon;
+
     public ViciousCTab(String label, Item icon) {
         super(label);
         this.icon = icon;
-        
+
     }
 
     @Override

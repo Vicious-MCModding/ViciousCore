@@ -12,6 +12,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 
 /**
@@ -23,14 +24,16 @@ public class BlockMultiblockComponent extends ViciousBlock implements ITileEntit
         super("multi", materialIn);
     }
 
-    @Nullable
     @Override
+    @Nullable
+    @ParametersAreNonnullByDefault
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         return new TileMultiBlockComponent();
     }
 
 
     @Override
+    @ParametersAreNonnullByDefault
     public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state) {
         notifyParent(worldIn, pos);
         super.onBlockDestroyedByPlayer(worldIn, pos, state);
@@ -44,17 +47,18 @@ public class BlockMultiblockComponent extends ViciousBlock implements ITileEntit
     }*/
 
     @Override
+    @ParametersAreNonnullByDefault
     public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
         super.onNeighborChange(world, pos, neighbor);
         TileEntity te = world.getTileEntity(pos);
-        if(te == null) return;
-        notifyParent(te.getWorld(),pos);
+        if (te == null) return;
+        notifyParent(te.getWorld(), pos);
     }
 
-    public void notifyParent(World worldin, BlockPos pos){
+    public void notifyParent(World worldin, BlockPos pos) {
         TileEntity tile = worldin.getTileEntity(pos);
-        if(tile instanceof INotifier){
-            ((INotifier)tile).notifyParent();
+        if (tile instanceof INotifier) {
+            ((INotifier<?>) tile).notifyParent();
         }
     }
 }

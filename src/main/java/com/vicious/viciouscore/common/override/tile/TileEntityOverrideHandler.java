@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.Map;
 
 public class TileEntityOverrideHandler {
-    private static Map<Class<?>, TileEntityOverrider> overriders = new HashMap<>();
-    private static Map<String, TileEntityOverrider> queued = new HashMap<>();
-    private static Map<World, Integer> prevTileCounts = new HashMap<>();
+    private static final Map<Class<?>, TileEntityOverrider> overriders = new HashMap<>();
+    private static final Map<String, TileEntityOverrider> queued = new HashMap<>();
+    private static final Map<World, Integer> prevTileCounts = new HashMap<>();
 
     /**
      * I tried doing this in an easier way by accessing addedTileEntityList which by ALL MEANS should have worked.
@@ -27,7 +27,7 @@ public class TileEntityOverrideHandler {
         if (tick.phase != TickEvent.Phase.END || tick.side == Side.CLIENT) return;
         World world = tick.world;
         List<TileEntity> loadedTileEntityList = (List<TileEntity>) Reflection.accessField(world, "loadedTileEntityList");
-        prevTileCounts.putIfAbsent(world,loadedTileEntityList.size());
+        prevTileCounts.putIfAbsent(world, loadedTileEntityList.size());
         if (prevTileCounts.get(world) != loadedTileEntityList.size()) {
             prevTileCounts.replace(world, loadedTileEntityList.size());
             try {
@@ -38,15 +38,17 @@ public class TileEntityOverrideHandler {
                         world.setTileEntity(ent.getPos(), overridden);
                     }
                 }
-            } catch(ConcurrentModificationException ignored){
+            } catch (ConcurrentModificationException ignored) {
                 //Rare, usually happens on world start when an old unoverwritten tile is present. In this case I've just chosen to skip the tick.
             }
         }
     }
-    public static void init(){
-        OverrideHandler.handleOverrideMap(queued,overriders);
+
+    public static void init() {
+        OverrideHandler.handleOverrideMap(queued, overriders);
     }
-    public static void registerOverrider(String targetTileClassCanonicalName, TileEntityOverrider teo){
-        queued.putIfAbsent(targetTileClassCanonicalName,teo);
+
+    public static void registerOverrider(String targetTileClassCanonicalName, TileEntityOverrider teo) {
+        queued.putIfAbsent(targetTileClassCanonicalName, teo);
     }
 }

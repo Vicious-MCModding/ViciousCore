@@ -10,8 +10,9 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public abstract class GenericEntity extends Entity{
-    private float hitRange = 0F;
+public abstract class GenericEntity extends Entity {
+    private final float hitRange = 0F;
+
     public GenericEntity(World worldIn) {
         super(worldIn);
     }
@@ -37,18 +38,21 @@ public abstract class GenericEntity extends Entity{
         }
         return null;
     }
+
     //Returns only player collisions.
-    protected EntityPlayer getPlayerEntityCollision(){
+    protected EntityPlayer getPlayerEntityCollision() {
         Entity entity = getEntityCollision();
         return entity instanceof EntityPlayer ? (EntityPlayer) entity : null;
     }
+
     //Returns only collisions that aren't the same type as this entity.
-    protected Entity getNonSameEntityCollision(){
+    protected Entity getNonSameEntityCollision() {
         Entity entity = getEntityCollision();
         return entity instanceof GenericProjectileEntity ? null : entity;
     }
+
     //Returns only collisions that are the same type as this entity.
-    protected Entity getSameEntityCollision(){
+    protected Entity getSameEntityCollision() {
         Entity entity = getEntityCollision();
         return entity instanceof GenericProjectileEntity ? entity : null;
     }

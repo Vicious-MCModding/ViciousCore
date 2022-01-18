@@ -10,19 +10,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mod.EventBusSubscriber(modid = ViciousCore.MODID)
-public class VItemRegistry extends Registrator{
-    private static List<Item> itemList = new ArrayList<>();
+public class VItemRegistry extends Registrator {
+    private static final List<Item> itemList = new ArrayList<>();
+
     //Structure tools
     /*public static ItemStructureAreaSelectionWand S_AREA_SELECTOR = register(new ItemStructureAreaSelectionWand("sareaselector"));
     public static ItemStructurePasteWand S_PASTER = register(new ItemStructurePasteWand("spaster"));
 */
-    public static <T extends Item> T register(T in){
+    public static <T extends Item> T register(T in) {
         itemList.add(in);
         return in;
     }
 
     @SubscribeEvent
-    public static void register(RegistryEvent.Register<Item> ev){
+    public static void register(RegistryEvent.Register<Item> ev) {
         /*IForgeRegistry<Item> reg = ev.getRegistry();
         for(Item i : itemList){
             reg.register(i);

@@ -12,10 +12,11 @@ import net.minecraft.world.World;
 import java.util.List;
 
 public class GenericEntityMob extends EntityMob {
+    private final float hitRange = 0F;
+
     public GenericEntityMob(World worldIn) {
         super(worldIn);
     }
-    private float hitRange = 0F;
 
     protected Entity getEntityCollision() {
         Vec3d vec31 = new Vec3d(this.posX, this.posY, this.posZ);
@@ -38,24 +39,28 @@ public class GenericEntityMob extends EntityMob {
         }
         return null;
     }
+
     //Returns only player collisions.
-    protected EntityPlayer getPlayerEntityCollision(){
+    protected EntityPlayer getPlayerEntityCollision() {
         Entity entity = getEntityCollision();
         return entity instanceof EntityPlayer ? (EntityPlayer) entity : null;
     }
+
     //Returns only collisions that aren't the same type as this entity.
-    protected Entity getNonSameEntityCollision(){
+    protected Entity getNonSameEntityCollision() {
         Entity entity = getEntityCollision();
         return entity instanceof GenericProjectileEntity ? null : entity;
     }
+
     //Returns only collisions that are the same type as this entity.
-    protected Entity getSameEntityCollision(){
+    protected Entity getSameEntityCollision() {
         Entity entity = getEntityCollision();
         return entity instanceof GenericProjectileEntity ? entity : null;
     }
-    protected Entity getTarget(){
+
+    protected Entity getTarget() {
         for (Entity entity : this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(4D))) {
-            if(entity instanceof EntityPlayer) return entity;
+            if (entity instanceof EntityPlayer) return entity;
         }
         return null;
     }
