@@ -103,6 +103,12 @@ public class ViciousBlock extends Block {
         return this;
     }
 
+
+    public ViciousBlock setHardness(double hardness) {
+        super.setHardness((float) hardness);
+        return this;
+    }
+
     /**
      * Method to set the code which runs when {@link #onBlockDestroyedByPlayer} is called
      * <br>Called after a player destroys this Block - the posiiton pos may no longer hold the state indicated
@@ -492,7 +498,7 @@ public class ViciousBlock extends Block {
     @Override
     @ParametersAreNonnullByDefault
     public int quantityDropped(Random random) {
-        int rand = attributes.iAttr.get("randRange") == 0 ? 0 : random.nextInt(attributes.iAttr.get("randRange"));
+        int rand = attributes.iAttr.getOrDefault("randRange", 0) == 0 ? 0 : random.nextInt(attributes.iAttr.get("randRange"));
         return attributes.iAttr.getOrDefault("quantityDropped", super.quantityDropped(random) + rand);
     }
 

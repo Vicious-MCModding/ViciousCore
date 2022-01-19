@@ -11,22 +11,15 @@ public class ViciousBlockCreator {
     public static ViciousBlock testBlock = new ViciousBlock("sampleblock", Material.ROCK, PropertyBool.create("passable"), PropertyBool.create("replaceable"));
     public static ViciousBlock testBlock2 = new ViciousBlock("sampleblock2", Material.ROCK);
 
-
-    static int i = 0; //counting placement
-
     public static void init() {
         testBlock = register(testBlock.setDisplayTickAction(() -> ViciousBlockCreator.blockParticles(testBlock, EnumParticleTypes.HEART))
+                .setHardness(0.5)
                 .setPassableCondition(true, () -> logger.info("passing"))
                 .setReplaceableCondition(true)
                 .setBlockPlaceOnSideCondition(() -> testBlock.attributes.set("canBlockPlaceOnSide", true))
-                .setSilkTouchDrop(() -> {
-                })
-                .setHarvestBlockAction(() -> {
-                })
                 .setOnBlockActivatedAction(() -> logger.info("testBlock activated"))
-                .setOnBlockAddedAction(() -> {
-                    i++;
-                    System.out.printf("Placed %s", i);
+                .setOnBlockLeftClickedAction(() -> {
+                    logger.info("testBlock clicked");
                 })
         );
         testBlock2 = register(testBlock2.setDisplayTickAction(() -> ViciousBlockCreator.blockParticles(testBlock, EnumParticleTypes.FLAME))

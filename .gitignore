@@ -1,7 +1,6 @@
 .gradle
 build/*
 run/*
-.out
 .idea
 config
 crash-reports
@@ -15,3 +14,13 @@ src.zip
 ViciousCore.iml
 ViciousCore.ipr
 ViciousCore.iws
+/build/
+.project
+.classpath
+/src/main/.classpath
+/src/main/.project
+bin
+.settings
+ViciousCore_Client.launch
+ViciousCore_Server.launch
+resources
