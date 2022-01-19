@@ -1,0 +1,11 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "up": "viciouscore:blocks/sampleblockside12",
+    "down": "viciouscore:blocks/sampleblockside62",
+    "north": "viciouscore:blocks/sampleblockside22",
+    "east": "viciouscore:blocks/sampleblockside32",
+    "south": "viciouscore:blocks/sampleblockside52",
+    "west": "viciouscore:blocks/sampleblockside42"
+  }
+}

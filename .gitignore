@@ -23,4 +23,3 @@ bin
 .settings
 ViciousCore_Client.launch
 ViciousCore_Server.launch
-resources

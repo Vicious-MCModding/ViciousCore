@@ -1,0 +1,25 @@
+{
+  "variants": {
+    "normal": {
+      "model": "viciouscore:sampleblock2"
+    },
+    "facing=north": {
+      "model": "viciouscore:sampleblock2"
+    },
+    "facing=east": {
+      "model": "viciouscore:sampleblock2",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "viciouscore:sampleblock2",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "viciouscore:sampleblock2",
+      "y": 270
+    },
+    "facing=front": {
+      "model": "viciouscore:sampleblock2"
+    }
+  }
+}

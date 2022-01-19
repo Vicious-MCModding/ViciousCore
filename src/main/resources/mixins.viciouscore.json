@@ -1,0 +1,10 @@
+{
+  "required": false,
+  "package": "com.vicious.viciouscore.mixin",
+  "refmap": "mixins.viciouscore.refmap.json",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+  ]
+}

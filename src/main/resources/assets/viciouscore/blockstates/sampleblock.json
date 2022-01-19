@@ -1,0 +1,76 @@
+{
+  "variants": {
+    "passable=true,replaceable=true,facing=north": {
+      "model": "viciouscore:sampleblock"
+    },
+    "passable=true,replaceable=true,facing=east": {
+      "model": "viciouscore:sampleblock",
+      "y": 90
+    },
+    "passable=true,replaceable=true,facing=south": {
+      "model": "viciouscore:sampleblock",
+      "y": 180
+    },
+    "passable=true,replaceable=true,facing=west": {
+      "model": "viciouscore:sampleblock",
+      "y": 270
+    },
+    "passable=true,replaceable=false,facing=north": {
+      "model": "viciouscore:sampleblock"
+    },
+    "passable=true,replaceable=false,facing=east": {
+      "model": "viciouscore:sampleblock",
+      "y": 90
+    },
+    "passable=true,replaceable=false,facing=south": {
+      "model": "viciouscore:sampleblock",
+      "y": 180
+    },
+    "passable=true,replaceable=false,facing=west": {
+      "model": "viciouscore:sampleblock",
+      "y": 270
+    },
+    "passable=false,replaceable=true,facing=north": {
+      "model": "viciouscore:sampleblock"
+    },
+    "passable=false,replaceable=true,facing=east": {
+      "model": "viciouscore:sampleblock",
+      "y": 90
+    },
+    "passable=false,replaceable=true,facing=south": {
+      "model": "viciouscore:sampleblock",
+      "y": 180
+    },
+    "passable=false,replaceable=true,facing=west": {
+      "model": "viciouscore:sampleblock",
+      "y": 270
+    },
+    "passable=false,replaceable=false,facing=north": {
+      "model": "viciouscore:sampleblock"
+    },
+    "passable=false,replaceable=false,facing=east": {
+      "model": "viciouscore:sampleblock",
+      "y": 90
+    },
+    "passable=false,replaceable=false,facing=south": {
+      "model": "viciouscore:sampleblock",
+      "y": 180
+    },
+    "passable=false,replaceable=false,facing=west": {
+      "model": "viciouscore:sampleblock",
+      "y": 270
+    },
+    "passable=true,replaceable=true": {
+      "model": "viciouscore:sampleblock"
+    },
+    "passable=true,replaceable=false": {
+      "model": "viciouscore:sampleblock"
+    },
+    "passable=false,replaceable=true": {
+      "model": "viciouscore:sampleblock"
+    },
+    "passable=false,replaceable=false": {
+      "model": "viciouscore:sampleblock"
+    }
+  }
+}

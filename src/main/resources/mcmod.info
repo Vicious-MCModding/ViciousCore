@@ -1,0 +1,16 @@
+[
+{
+  "modid": "viciouscore",
+  "name": "Vicious Core",
+  "description": "A mod made specifically for the creation of epic battles.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Drathonix","curmor"],
+  "credits": "God",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
