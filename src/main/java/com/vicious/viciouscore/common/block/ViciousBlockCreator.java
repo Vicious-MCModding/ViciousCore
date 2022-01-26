@@ -2,6 +2,9 @@ package com.vicious.viciouscore.common.block;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 
 import static com.vicious.viciouscore.ViciousCore.logger;
@@ -18,11 +21,19 @@ public class ViciousBlockCreator {
                 .setReplaceableCondition(true)
                 .setBlockPlaceOnSideCondition(() -> testBlock.attributes.set("canBlockPlaceOnSide", true))
                 .setOnBlockActivatedAction(() -> logger.info("testBlock activated"))
-                .setOnBlockLeftClickedAction(() -> {
-                    logger.info("testBlock clicked");
+                .setOnBlockLeftClickedAction(() -> logger.info("testBlock clicked"))
+                .setOnBlockPlacedByAction(() -> {
+                    ViciousBlock.Attributes attrs = testBlock.attributes;
+                    EntityLivingBase placer = (EntityLivingBase) attrs.entity;
+                    if (placer instanceof EntityPlayer) {
+                        EntityPlayer player = (EntityPlayer) placer;
+                        ItemStack stack = attrs.stack;
+                        int index = player.inventory.mainInventory.indexOf(stack);
+                        logger.info(String.format("Placed Item in %s slot", index));
+                    }
                 })
         );
-        testBlock2 = register(testBlock2.setDisplayTickAction(() -> ViciousBlockCreator.blockParticles(testBlock, EnumParticleTypes.FLAME))
+        testBlock2 = register(testBlock2.setDisplayTickAction(() -> ViciousBlockCreator.blockParticles(testBlock2, EnumParticleTypes.FLAME))
                 .setOnBlockDestroyByPlayerAction(() -> logger.info("testBlock2 destroyed"))
                 .setOnBlockActivatedAction(() -> logger.info("testBlock2 activated"))
         );

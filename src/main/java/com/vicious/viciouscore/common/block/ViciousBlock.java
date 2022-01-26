@@ -1,6 +1,5 @@
 package com.vicious.viciouscore.common.block;
 
-
 import com.vicious.viciouscore.ViciousCore;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -22,6 +21,7 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -79,6 +79,7 @@ public class ViciousBlock extends Block {
             Boolean value = this.getDefaultState().getValue(prop);
             if (condition != value) this.getDefaultState().cycleProperty(prop);
         }
+        attributes.collisionBoundingBox = condition ? NULL_AABB : FULL_BLOCK_AABB;
         return this;
     }
 
@@ -102,7 +103,6 @@ public class ViciousBlock extends Block {
         attributes.setRunnable("displayTick", r1);
         return this;
     }
-
 
     public ViciousBlock setHardness(double hardness) {
         super.setHardness((float) hardness);
@@ -195,7 +195,6 @@ public class ViciousBlock extends Block {
         attributes.setRunnable("addDrops", r1);
         return this;
     }
-
 
     /**
      * Set what kind of render layer this block will have when rendered
@@ -413,6 +412,17 @@ public class ViciousBlock extends Block {
 
     @Override
     @ParametersAreNonnullByDefault
+    @SuppressWarnings("deprecation")
+    public boolean isFullCube(IBlockState state) {
+        if (properties.containsKey("passable")) {
+            PropertyBool bool = (PropertyBool) properties.get("passable");
+            return bool != null && state.getValue(bool);
+        }
+        return true;
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
     public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
         PropertyBool bool = (PropertyBool) properties.get("passable");
         return bool == null ? super.isReplaceable(worldIn, pos) : this.getDefaultState().getValue(bool);
@@ -423,6 +433,24 @@ public class ViciousBlock extends Block {
     public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos) {
         PropertyBool bool = (PropertyBool) properties.get("replaceable");
         return bool == null ? super.isReplaceable(worldIn, pos) : this.getDefaultState().getValue(bool);
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    @SuppressWarnings("deprecation")
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+        return attributes.collisionBoundingBox;
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    @SuppressWarnings("deprecation")
+    public boolean isOpaqueCube(IBlockState state) {
+        if (properties.containsKey("passable")) {
+            PropertyBool bool = (PropertyBool) properties.get("passable");
+            return bool != null && state.getValue(bool);
+        }
+        return true;
     }
 
     @Override
@@ -530,7 +558,9 @@ public class ViciousBlock extends Block {
                         .pos(pos)
                         .facing(side));
         if (!attributes.bAttr.containsKey("canPlaceBlockOnSide")) {
-            logger.warn(String.format("%s: \"canPlaceBlockOnSide\" not assigned in boolean attributes. Defaulting to Block.canPlaceBlockOnSide", this.getLocalizedName()));
+            if (attributes.actions.containsKey("placeOnSide")) {
+                logger.warn(String.format("%s: \"canPlaceBlockOnSide\" not assigned in boolean attributes. Defaulting to Block.canPlaceBlockOnSide", this.getLocalizedName()));
+            }
             attributes.bAttr.put("canPlaceBlockOnSide", super.canPlaceBlockOnSide(worldIn, pos, side));
         }
         return attributes.bAttr.get("canPlaceBlockOnSide");
@@ -544,7 +574,9 @@ public class ViciousBlock extends Block {
                         .world(worldIn)
                         .pos(pos));
         if (!attributes.bAttr.containsKey("canPlaceAt")) {
-            logger.warn(String.format("%s: \"canPlaceAt\" not assigned in boolean attributes. Defaulting to Block.canPlaceAt", this.getLocalizedName()));
+            if (attributes.actions.containsKey("placeBlockAt")) {
+                logger.warn(String.format("%s: \"canPlaceAt\" not assigned in boolean attributes. Defaulting to Block.canPlaceAt", this.getLocalizedName()));
+            }
             attributes.bAttr.put("canPlaceAt", super.canPlaceBlockAt(worldIn, pos));
         }
         return attributes.bAttr.get("canPlaceAt");
@@ -635,7 +667,9 @@ public class ViciousBlock extends Block {
                         .fortune(fortune)
                         .rand(random));
         if (!attributes.iAttr.containsKey("dropsFromFortune")) {
-            logger.warn(String.format("%s: \"dropsFromFortune\" not assigned in integer attributes. Defaulting to Block.quantityDroppedWithBonus", this.getLocalizedName()));
+            if (attributes.actions.containsKey("dropsFromFortune")) {
+                logger.warn(String.format("%s: \"dropsFromFortune\" not assigned in integer attributes. Defaulting to Block.quantityDroppedWithBonus", this.getLocalizedName()));
+            }
             attributes.iAttr.put("dropsFromFortune", super.quantityDroppedWithBonus(fortune, random));
         }
         return attributes.iAttr.get("dropsFromFortune");
@@ -644,6 +678,13 @@ public class ViciousBlock extends Block {
     @Override
     @ParametersAreNonnullByDefault
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        attributes.runAction("onBlockPlaced",
+                new Attributes.RunActionParams(attributes)
+                        .world(worldIn)
+                        .pos(pos)
+                        .state(state)
+                        .entity(placer)
+                        .stack(stack));
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
     }
 
@@ -709,6 +750,25 @@ public class ViciousBlock extends Block {
         return super.canBeConnectedTo(world, pos, facing);
     }
 
+    /**
+     * Method to set the code which runs when {@link #onBlockPlacedBy} is called
+     * <br>Called by ItemBlocks after a block is set in the world, to allow post-place logic.
+     * <br>Primarily used to initialise the block's tile entity
+     *
+     * @param r1 code to be run
+     *           <ul>Avaliable Attributes:
+     *             <li>world</li>
+     *             <li>pos</li>
+     *             <li>state</li>
+     *             <li>entity (EntityLivingBase)</li>
+     *             <li>stack</li>
+     * @return self
+     */
+    public ViciousBlock setOnBlockPlacedByAction(Runnable r1) {
+        attributes.setRunnable("onBlockPlaced", r1);
+        return this;
+    }
+
     private <T> T getOrDefault(T a, T b) {
         return a == null ? b : a;
     }
@@ -717,10 +777,10 @@ public class ViciousBlock extends Block {
         // storing all properties for workaround in createBlockState();
         private static final Hashtable<String, Hashtable<String, IProperty<?>>> properties = new Hashtable<>();
         private static String lastAddedName;
+        public final Hashtable<String, Boolean> bAttr = new Hashtable<>();
+        public final Hashtable<String, Integer> iAttr = new Hashtable<>();
+        public final Hashtable<String, String> sAttr = new Hashtable<>();
         private final Hashtable<String, Runnable> actions = new Hashtable<>();
-        private final Hashtable<String, Boolean> bAttr = new Hashtable<>();
-        private final Hashtable<String, Integer> iAttr = new Hashtable<>();
-        private final Hashtable<String, String> sAttr = new Hashtable<>();
         public World world;
         public IBlockState state;
         public BlockPos pos;
@@ -737,6 +797,7 @@ public class ViciousBlock extends Block {
         public NonNullList<ItemStack> drops;
         public Integer fortune;
         public ItemStack silkTouchDrop;
+        private AxisAlignedBB collisionBoundingBox = FULL_BLOCK_AABB;
         private BlockRenderLayer blockRenderLayer;
         private Item droppedItem;
 
@@ -758,7 +819,7 @@ public class ViciousBlock extends Block {
                 try {
                     action.run();
                 } catch (NullPointerException e) {
-                    logger.error(e.getMessage(), e);
+                    logger.error(String.format("Error in action %s\n", name), e);
                 }
             }
         }
