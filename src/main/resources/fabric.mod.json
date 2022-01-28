@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "viciouscore",
+  "version": "${version}",
+
+  "name": "ViciousCore",
+  "description": "This is an example description! Tell everyone what your mod is about!",
+  "authors": [
+    "Me!"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/Vicious-MCModding/ViciousCore"
+  },
+
+  "license": "CC0-1.0",
+  "icon": "assets/viciouscore/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.vicious.viciouscore.ViciousCore"
+    ]
+  },
+  "mixins": [
+    "viciouscore.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.12.12",
+    "fabric": "*",
+    "minecraft": "1.18.x",
+    "java": ">=17"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.vicious.viciouscore.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "ViciousMixin"
+  ],
+  "client": [
+    "ViciousMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
