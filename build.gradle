@@ -10,6 +10,9 @@ archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
 
+String gitlink = "github.com/Vicious-MCModding/ViciousCore"
+
+
 repositories {
 	maven {
 		name = "ViciousLib"
@@ -77,7 +80,7 @@ publishing {
 	repositories {
 		maven {
 			name = "ViciousCore"
-			url = uri("https://maven.pkg.${project.gitlink}")
+			url = uri("https://maven.pkg.${gitlink}")
 			credentials {
 				username = project.gpr_name
 				password = project.gpr_key
